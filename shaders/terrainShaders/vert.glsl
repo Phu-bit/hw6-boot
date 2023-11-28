@@ -8,10 +8,24 @@ uniform float uLacunarity;
 uniform float uExponentiation;
 uniform float uHeight;
 uniform int uOctaves;
+uniform float uResolution;
+
+uniform float uTileSize;
 
 varying vec4 vPos;
 
 float perlinColor;
+vec2 tileSize = vec2(uTileSize, uTileSize);
+
+
+//All Noise functions from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,
+                         vec2(12.9898,78.233)))*
+        43758.5453123);
+}
+
 
 // Function to interpolate between values with a smooth curve
 float fade(float t) {
@@ -69,25 +83,31 @@ float ComputeFBM(vec2 v) {
     return pow(total, uExponentiation) * uHeight;
 }
 
+
+
 void main() {
-    // Use color unchanged
-    gl_FrontColor = gl_Color;
 
-    // Set vertex coordinates
-    vec4 position = gl_Vertex;
+  // Set vertex coordinates
+  vec4 position = gl_Vertex;
 
-    // Apply the noise function to create a random offset
-    // float randomOffset = ComputeFBM(position.xz + uTime) * 1.0; // time is used to animate the noise
-    float randomOffset = ComputeFBM(position.xz ) * 1.0; // no time animation
+  // Apply the noise function to create a random offset
+  // float randomOffset = ComputeFBM(position.xz + uTime) * 1.0; // time is used to animate the noise
+  // float randomOffset = ComputeFBM(position.xz ) * 1.0; // no time animation
+  vec2 tiledCoords = vec2(position.xz) / tileSize;  
+  float randomOffset = random(tiledCoords ) * 1.0;; // no time animation
 
-    // Modify position by random offset
-    // position.y += randomOffset;
+  // Modify position by random offset
+  // position.y += randomOffset;
 
-    perlinColor += randomOffset;
+  perlinColor += randomOffset;
 
-    // Transform the position to clip space and assign to gl_Position
-    gl_Position = gl_ModelViewProjectionMatrix * position;
+  // Transform the position to clip space and assign to gl_Position
+  gl_Position = gl_ModelViewProjectionMatrix * position;
 
-    // vPos = position;
-    vPos = vec4(randomOffset);
+  // vPos = position;
+  vPos = vec4(randomOffset);
+
+  // Use color unchanged
+  gl_FrontColor = gl_Color;
+
 }

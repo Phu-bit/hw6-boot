@@ -27,54 +27,16 @@
  *  ESC        Exit
  */
 #include "CSCIx229.h"
+#include "Globals.h"
+#include "ImGuiHelper.h"
 
 #include "imgui.h"
 #include "imgui_impl_glut.h"
 #include "imgui_impl_opengl2.h"
 
 
-int axes=1;       //  Display axes
-int mode=1;       //  Projection mode
-int move=1;       //  Move light
-int th=0;         //  Azimuth of view angle
-int ph=0;         //  Elevation of view angle
-int fov=75;       //  Field of view (for perspective)
-int obj=0;        //  Scene/opbject selection
-double asp=1;     //  Aspect ratio
-double dim=6;     //  Size of world
 int ntex=0;    //  Texture
 double t = 0;
-// Light values
-int light     =   1;  // Lighting
-int one       =   1;  // Unit value
-int distance  =   5;  // Light distance
-int inc       =  10;  // Ball increment
-int smooth    =   1;  // Smooth/Flat shading
-int local     =   0;  // Local Viewer Model
-int emission  =   0;  // Emission intensity (%)
-int ambient   =   20;  // Ambient intensity (%)
-int diffuse   =  80;  // Diffuse intensity (%)
-int specular  =   0;  // Specular intensity (%)
-int shininess =   0;  // Shininess (power of two)
-float shiny   =   1;  // Shininess (value)
-int zh        =  90;  // Light azimuth
-float ylight  =   0;  // Elevation of light
-
-//Shader
-int shader = 0;
-unsigned int texture[3];
-
-//perlin noise
-float uScale=8.5;
-float uPersistence=2.0;
-float uLacunarity=4.0;
-float uExponentiation=2;
-float uHeight=2.5;
-int uOctaves=4.0;
-
-//state
-static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
 
 
 /*
@@ -142,12 +104,16 @@ void display()
       glUniform1f(id,uHeight);
       id = glGetUniformLocation(shader,"uOctaves");
       glUniform1i(id,uOctaves);
+      id = glGetUniformLocation(shader,"uTileSize");
+      glUniform1f(id,uTileSize);
+      id = glGetUniformLocation(shader,"uResolution");
+      glUniform1f(id,planeSize);
 
       id = glGetUniformLocation(shader,"uTime");
       
       glUniform1f(id,t);
 
-      drawTessellatedPlane(10,10,256,256);
+      drawTessellatedPlane(planeSize, planeSize,256,256);
       glUseProgram(0);
 
    }
@@ -177,13 +143,9 @@ void display()
    ImGui::NewFrame();
    ImGuiIO& io = ImGui::GetIO();
 
-   ImGui::Begin("hello world");
-   ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-   ImGui::Text("App average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-   ImGui::End();
+   RenderImGuiGeneralControls();
 
    ImGui::Render();
-   // glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 
    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
@@ -241,8 +203,6 @@ void special(int key,int x,int y)
    else if (key == GLUT_KEY_F8)
       inc = (inc==10)?3:10;
    //  Flip sign
-   else if (key == GLUT_KEY_F9)
-      one = -one;
    //  Keep angles to +/-360 degrees
    th %= 360;
    ph %= 360;
@@ -264,9 +224,6 @@ void key(unsigned char ch,int x,int y)
    else if (ch == '0')
       th = ph = 0;
    //  Toggle axes
-   else if (ch == 'x' || ch == 'X')
-      axes = 1-axes;
-   //  Toggle lighting
    else if (ch == 'l' || ch == 'L')
       light = 1-light;
    //  Switch projection mode
@@ -285,40 +242,6 @@ void key(unsigned char ch,int x,int y)
       fov--;
    else if (ch == '=' && ch<179)
       fov++;
-   //  Switch scene/object
-   else if (ch == 'o')
-      obj = (obj+1)%3;
-   else if (ch == 'O')
-      obj = (obj+2)%3;
-      else if (ch == 'z')
-      uScale = uScale > 1 ? uScale - 0.1 : 1;  // prevent it from being less than 1
-   else if (ch == 'Z')
-      uScale += 0.1;
-   // Persistence
-   else if (ch == 'c')
-      uPersistence = uPersistence > 0.1 ? uPersistence - 0.1 : 0.1;  // prevent it from being too low
-   else if (ch == 'C')
-      uPersistence += 0.1;
-   // Lacunarity
-   else if (ch == 'v')
-      uLacunarity = uLacunarity > 1.1 ? uLacunarity - 0.1 : 1.1;  // keep it above 1
-   else if (ch == 'V')
-      uLacunarity += 0.1;
-   // Exponentiation
-   else if (ch == 'b')
-      uExponentiation = uExponentiation > 1 ? uExponentiation - 0.1 : 1;  // keep it sane
-   else if (ch == 'B')
-      uExponentiation += 0.1;
-   // Height
-   else if (ch == 'n')
-      uHeight = uHeight > 1 ? uHeight - 0.1 : 1;  // prevent it from being less than 1
-   else if (ch == 'N')
-      uHeight += 0.1;
-   // Octaves
-   else if (ch == ',')
-      uOctaves = uOctaves > 1 ? uOctaves - 1 : 1;  // prevent it from being less than 1
-   else if (ch == '.')
-      uOctaves += 1;
 
    //  Translate shininess power to value (-1 => 0)
    shiny = shininess<0 ? 0 : pow(2.0,shininess);

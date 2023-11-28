@@ -14,8 +14,9 @@ extern int fov;
 extern int obj;
 extern double asp;
 extern double dim;
+
+// Light values
 extern int light;
-extern int one;
 extern int distance;
 extern int inc;
 extern int smooth;
@@ -28,14 +29,23 @@ extern int shininess;
 extern float shiny;
 extern int zh;
 extern float ylight;
+
+// Shader program
 extern int shader;
 extern unsigned int texture[3];
+
+
+//Uniform for terrain
 extern float uScale;
 extern float uPersistence;
 extern float uLacunarity;
 extern float uExponentiation;
 extern float uHeight;
 extern int uOctaves;
+extern float uTileSize;
+extern float planeSize;
+
+//Background Color
 extern ImVec4 clear_color;
 
 #endif

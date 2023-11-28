@@ -25,7 +25,7 @@ CLEAN=rm -f $(EXE) *.o *.a
 endif
 
 # Dependencies
-hw6.o: hw6.cpp CSCIx229.h imgui.h
+hw6.o: hw6.cpp CSCIx229.h imgui.h Globals.h
 fatal.o: fatal.c CSCIx229.h
 errcheck.o: errcheck.c CSCIx229.h
 print.o: print.c CSCIx229.h
@@ -45,6 +45,8 @@ toriGate.o: toriGate.c CSCIx229.h
 shaderCompile.o: shaderCompile.c CSCIx229.h
 tessellatedPlane.o: tessellatedPlane.c CSCIx229.h
 init.o: init.c CSCIx229.h
+Globals.o: Globals.cpp Globals.h
+ImGuiHelper.o: ImGuiHelper.cpp ImGuiHelper.h imgui.h Globals.h
 imgui.o: imgui.cpp imgui.h imgui_internal.h
 imgui_demo.o: imgui_demo.cpp imgui.h 
 imgui_draw.o: imgui_draw.cpp imgui.h imgui_internal.h imstb_rectpack.h imstb_textedit.h imstb_truetype.h
@@ -61,7 +63,7 @@ imgui.a: imgui.o imgui_demo.o imgui_draw.o imgui_widgets.o imgui_tables.o imgui_
 	ar -rcs $@ $^
 
 
-CSCIx229.a:fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o axesHelper.o cube.o icosahedron.o ball.o light.o cylinder.o truncatedPyramid.o colors.o calculateNormalVector.o toriGate.o shaderCompile.o tessellatedPlane.o init.o
+CSCIx229.a:fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o axesHelper.o cube.o icosahedron.o ball.o light.o cylinder.o truncatedPyramid.o colors.o calculateNormalVector.o toriGate.o shaderCompile.o tessellatedPlane.o init.o Globals.o ImGuiHelper.o
 	ar -rcs $@ $^
 
 # Compile rules
@@ -71,7 +73,7 @@ CSCIx229.a:fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o axesHe
 	g++ -c $(CFLG)  $<
 
 #  Link
-hw6:hw6.o   CSCIx229.a    imgui.a
+hw6:hw6.o Globals.o ImGuiHelper.o CSCIx229.a  imgui.a
 	g++ $(CFLG) -o $@ $^ $(LIBS)
 
 #  Clean
