@@ -32,8 +32,12 @@ float uLacunarity=4.0;
 float uExponentiation=2;
 float uHeight=2.5;
 int uOctaves=4.0;
-float uTileSize = 1.0f;
-float planeSize = 10.0f;
+int uTileSize = 5.0f;
+int planeSize = 10.0f;
+
+
+int texWidth = 256; // Width of the texture
+int texHeight = 256; // Height of the texture
 
 //state
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

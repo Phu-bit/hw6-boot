@@ -8,14 +8,14 @@ uniform float uLacunarity;
 uniform float uExponentiation;
 uniform float uHeight;
 uniform int uOctaves;
-uniform float uResolution;
+uniform vec3 uResolution;
 
-uniform float uTileSize;
+uniform int uTileSize;
 
 varying vec4 vPos;
 
 float perlinColor;
-vec2 tileSize = vec2(uTileSize, uTileSize);
+
 
 
 //All Noise functions from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -93,10 +93,20 @@ void main() {
   // Apply the noise function to create a random offset
   // float randomOffset = ComputeFBM(position.xz + uTime) * 1.0; // time is used to animate the noise
   // float randomOffset = ComputeFBM(position.xz ) * 1.0; // no time animation
-  vec2 tiledCoords = vec2(position.xz) / tileSize;  
-  float randomOffset = random(tiledCoords ) * 1.0;; // no time animation
 
-  // Modify position by random offset
+    // Convert the vertex position to a 2D plane
+  vec2 st = position.xz;
+
+  // Scale the coordinate system
+  st *= uTileSize;
+
+  // Get the integer coordinates (like a grid)
+  vec2 ipos = floor(st);
+
+  float randomOffset = step(0.5, random(ipos));
+
+
+  // Creating the heightmap
   // position.y += randomOffset;
 
   perlinColor += randomOffset;

@@ -126,6 +126,7 @@ extern double dim;
 extern int light;
 extern unsigned int texture[3];
 extern int shader;
+extern GLuint fbo, CAtexture;
 
 
 #ifdef __cplusplus

@@ -37,7 +37,8 @@
 
 int ntex=0;    //  Texture
 double t = 0;
-
+GLuint fbo;
+GLuint CAtexture = 0;
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -105,12 +106,11 @@ void display()
       id = glGetUniformLocation(shader,"uOctaves");
       glUniform1i(id,uOctaves);
       id = glGetUniformLocation(shader,"uTileSize");
-      glUniform1f(id,uTileSize);
-      id = glGetUniformLocation(shader,"uResolution");
-      glUniform1f(id,planeSize);
+      glUniform1i(id,uTileSize);
 
+      id = glGetUniformLocation(shader,"uResolution");
+      glUniform3i(id,planeSize, 0.0f, planeSize);
       id = glGetUniformLocation(shader,"uTime");
-      
       glUniform1f(id,t);
 
       drawTessellatedPlane(planeSize, planeSize,256,256);
@@ -276,27 +276,50 @@ void reshape(int width,int height)
 #include "CSCIx229.h"
 
 int main(int argc, char* argv[]) {
-    glutInit(&argc, argv);
+   glutInit(&argc, argv);
 
-    init("3D Scene", display, reshape, key, special, idle);
-    // imgui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.DisplaySize = ImVec2((float)800, (float)800);
-    ImGui::StyleColorsDark();
-    ImGui_ImplGLUT_Init();
-    ImGui_ImplOpenGL2_Init();
-    ImGui_ImplGLUT_InstallFuncs();
+   init("3D Scene", display, reshape, key, special, idle);
+   // imgui
+   IMGUI_CHECKVERSION();
+   ImGui::CreateContext();
+   ImGuiIO& io = ImGui::GetIO(); (void)io;
+   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+   io.DisplaySize = ImVec2((float)800, (float)800);
+   ImGui::StyleColorsDark();
+   ImGui_ImplGLUT_Init();
+   ImGui_ImplOpenGL2_Init();
+   ImGui_ImplGLUT_InstallFuncs();
 
-    glutMainLoop();
+   // Generate Texture
+   glGenTextures(1, &CAtexture);
+   glBindTexture(GL_TEXTURE_2D, CAtexture);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+   glBindTexture(GL_TEXTURE_2D, 0);
 
-    // Cleanup
-    ImGui_ImplOpenGL2_Shutdown();
-    ImGui_ImplGLUT_Shutdown();
-    ImGui::DestroyContext();
+   // Generate Framebuffer
+   glGenFramebuffers(1, &fbo);
+   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, CAtexture, 0);
 
-    return 0;
+   // check if framebuffer is complete
+   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+   {
+      printf("Framebuffer is not complete!\n");
+      exit(0);
+   }
+   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+   glutMainLoop();
+
+   // Cleanup
+   ImGui_ImplOpenGL2_Shutdown();
+   ImGui_ImplGLUT_Shutdown();
+   ImGui::DestroyContext();
+
+   return 0;
 }

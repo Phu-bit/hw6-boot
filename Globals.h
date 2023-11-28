@@ -42,8 +42,13 @@ extern float uLacunarity;
 extern float uExponentiation;
 extern float uHeight;
 extern int uOctaves;
-extern float uTileSize;
-extern float planeSize;
+extern int uTileSize;
+extern int planeSize;
+
+
+extern int texWidth; // Width of the texture
+extern int texHeight; // Height of the texture
+
 
 //Background Color
 extern ImVec4 clear_color;
