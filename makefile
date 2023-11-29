@@ -14,6 +14,7 @@ else
 ifeq "$(shell uname)" "Darwin"
 RES=$(shell uname -r|sed -E 's/(.).*/\1/'|tr 12 21)
 CFLG=-O3 -Wall -Wno-deprecated-declarations -DRES=$(RES)
+CXXFLG=$(CFLG) -std=c++14
 LIBS=-framework GLUT -framework OpenGL
 #  Linux/Unix/Solaris
 else
@@ -69,8 +70,9 @@ CSCIx229.a:fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o axesHe
 # Compile rules
 .c.o:
 	gcc -c $(CFLG)  $<
+	
 .cpp.o:
-	g++ -c $(CFLG)  $<
+	g++ -c $(CXXFLG) $<
 
 #  Link
 hw6:hw6.o Globals.o ImGuiHelper.o CSCIx229.a  imgui.a

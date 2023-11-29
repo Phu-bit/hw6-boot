@@ -1,0 +1,4 @@
+/shaders
+/textures
+*.o
+*.exe
