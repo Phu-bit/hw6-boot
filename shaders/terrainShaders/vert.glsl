@@ -13,6 +13,7 @@ uniform vec3 uResolution;
 uniform int uTileSize;
 
 varying vec4 vPos;
+varying vec3 vNormal;
 
 float perlinColor;
 
@@ -85,36 +86,26 @@ float ComputeFBM(vec2 v) {
 
 void main() {
 
-  // Set vertex coordinates
   vec4 position = gl_Vertex;
-
-  // Apply the noise function to create a random offset
-  // float randomOffset = ComputeFBM(position.xz + uTime) * 1.0; // time is used to animate the noise
-  float randomOffset = ComputeFBM( position.xz ) * 1.0; // no time animation
-
-  /*
-  * Tiled Grid for later...
-  */
-
-  //   // Convert the vertex position to a 2D plane
-  // vec2 st = position.xz;
-
-  // // Scale the coordinate system
-  // st *= uTileSize;
-
-  // // Get the integer coordinates (like a grid)
-  // vec2 ipos = floor(st);
-
-  // float randomOffset = step(0.5, random(ipos));
-
-
-  // Creating the heightmap
+  float randomOffset = ComputeFBM(position.xz);
   position.y += randomOffset;
 
-  // perlinColor += randomOffset;
+  // Calculate the gradient
+  float dx = 0.01; // A small offset for sampling
+  float dy = 0.01;
+  float heightRight = ComputeFBM(position.xz + vec2(dx, 0.0));
+  float heightUp = ComputeFBM(position.xz + vec2(0.0, dy));
+  vec3 gradient = vec3(heightRight - randomOffset, heightUp - randomOffset, dx * dy) * 1.0;
+  
+  // Calculate the normal
+  vec3 up = vec3(0.0, 1.0, 0.0);
+  vec3 normal = normalize(cross(up, gradient));
 
-  // Transform the position to clip space and assign to gl_Position
+  // Transform position
   gl_Position = gl_ModelViewProjectionMatrix * position;
+
+  // Pass the normal to the fragment shader if needed
+  vNormal = normal; // Make sure you declare vNormal as a varying
 
   // vPos = position;
   vPos = vec4(randomOffset);

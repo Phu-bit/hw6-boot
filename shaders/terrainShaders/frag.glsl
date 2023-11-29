@@ -2,6 +2,7 @@
 #version 120
 
 varying vec4 vPos;
+varing vec3 vNormal;
 
 void main()
 {
