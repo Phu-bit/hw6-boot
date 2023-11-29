@@ -16,8 +16,6 @@ varying vec4 vPos;
 
 float perlinColor;
 
-
-
 //All Noise functions from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 
 float random (vec2 st) {
