@@ -1,31 +1,3 @@
-/*
- *  Lighting
- *
- *  Demonstrates basic lighting using a cube, sphere and icosahedron.
- *
- *  Key bindings:
- *  l          Toggles lighting
- *  a/A        Decrease/increase ambient light
- *  d/D        Decrease/increase diffuse light
- *  s/S        Decrease/increase specular light
- *  e/E        Decrease/increase emitted light
- *  n/N        Decrease/increase shininess
- *  F1         Toggle smooth/flat shading
- *  F2         Toggle local viewer mode
- *  F3         Toggle light distance (1/5)
- *  F8         Change ball increment
- *  F9         Invert bottom normal
- *  m          Toggles light movement
- *  []         Lower/rise light
- *  p          Toggles ortogonal/perspective projection
- *  o          Cycles through objects
- *  +/-        Change field of view of perspective
- *  x          Toggle axes
- *  arrows     Change view angle
- *  PgDn/PgUp  Zoom in and out
- *  0          Reset view angle
- *  ESC        Exit
- */
 #include "CSCIx229.h"
 #include "Globals.h"
 #include "ImGuiHelper.h"
@@ -107,13 +79,13 @@ void display()
       glUniform1i(id,uOctaves);
       id = glGetUniformLocation(shader,"uTileSize");
       glUniform1i(id,uTileSize);
-
       id = glGetUniformLocation(shader,"uResolution");
       glUniform3i(id,planeSize, 0.0f, planeSize);
       id = glGetUniformLocation(shader,"uTime");
       glUniform1f(id,t);
 
       drawTessellatedPlane(planeSize, planeSize,256,256);
+      
       glUseProgram(0);
 
    }
@@ -291,26 +263,26 @@ int main(int argc, char* argv[]) {
    ImGui_ImplOpenGL2_Init();
    ImGui_ImplGLUT_InstallFuncs();
 
-   // Generate Texture
-   glGenTextures(1, &CAtexture);
-   glBindTexture(GL_TEXTURE_2D, CAtexture);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-   glBindTexture(GL_TEXTURE_2D, 0);
+   // // Generate Texture
+   // glGenTextures(1, &CAtexture);
+   // glBindTexture(GL_TEXTURE_2D, CAtexture);
+   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+   // glBindTexture(GL_TEXTURE_2D, 0);
 
-   // Generate Framebuffer
-   glGenFramebuffers(1, &fbo);
-   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, CAtexture, 0);
+   // // Generate Framebuffer
+   // glGenFramebuffers(1, &fbo);
+   // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+   // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, CAtexture, 0);
 
-   // check if framebuffer is complete
-   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-   {
-      printf("Framebuffer is not complete!\n");
-      exit(0);
-   }
-   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+   // // check if framebuffer is complete
+   // if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+   // {
+   //    printf("Framebuffer is not complete!\n");
+   //    exit(0);
+   // }
+   // glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
 

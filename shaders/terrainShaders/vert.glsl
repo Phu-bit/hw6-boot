@@ -92,24 +92,28 @@ void main() {
 
   // Apply the noise function to create a random offset
   // float randomOffset = ComputeFBM(position.xz + uTime) * 1.0; // time is used to animate the noise
-  // float randomOffset = ComputeFBM(position.xz ) * 1.0; // no time animation
+  float randomOffset = ComputeFBM( position.xz ) * 1.0; // no time animation
 
-    // Convert the vertex position to a 2D plane
-  vec2 st = position.xz;
+  /*
+  * Tiled Grid for later...
+  */
 
-  // Scale the coordinate system
-  st *= uTileSize;
+  //   // Convert the vertex position to a 2D plane
+  // vec2 st = position.xz;
 
-  // Get the integer coordinates (like a grid)
-  vec2 ipos = floor(st);
+  // // Scale the coordinate system
+  // st *= uTileSize;
 
-  float randomOffset = step(0.5, random(ipos));
+  // // Get the integer coordinates (like a grid)
+  // vec2 ipos = floor(st);
+
+  // float randomOffset = step(0.5, random(ipos));
 
 
   // Creating the heightmap
-  // position.y += randomOffset;
+  position.y += randomOffset;
 
-  perlinColor += randomOffset;
+  // perlinColor += randomOffset;
 
   // Transform the position to clip space and assign to gl_Position
   gl_Position = gl_ModelViewProjectionMatrix * position;
