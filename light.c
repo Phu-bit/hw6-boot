@@ -7,7 +7,7 @@ void lightOn(int ambient, int diffuse, int specular, int distance, float ylight,
       float Diffuse[]   = {0.01*diffuse ,0.01*diffuse ,0.01*diffuse ,1.0};
       float Specular[]  = {0.01*specular,0.01*specular,0.01*specular,1.0};
       //  Light position
-      float Position[]  = {distance*Cos(zh),ylight,distance*Sin(zh),1.0};
+      float Position[]  = {distance*Cos(zh),distance*Sin(zh),ylight,1.0};
       //  Draw light position as ball (still no lighting here)
       glColor3f(1,1,1);
       ball(Position[0],Position[1],Position[2] , 0.1, emission, shiny, inc);
