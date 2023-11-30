@@ -22,7 +22,7 @@ int specular  =   0;  // Specular intensity (%)
 int shininess =   0;  // Shininess (power of two)
 float shiny   =   1;  // Shininess (value)
 int zh        =  90;  // Light azimuth
-float ylight  =   0;  // Elevation of light
+float ylight  =   1;  // Elevation of light
 //Shader
 int shader = 0;
 unsigned int texture[3];

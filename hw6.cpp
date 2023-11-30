@@ -206,9 +206,9 @@ void key(unsigned char ch,int x,int y)
       move = 1-move;
    //  Move light
    else if (ch == '<')
-      zh += 1;
+      ylight += 1;
    else if (ch == '>')
-      zh -= 1;
+      ylight -= 1;
    //  Change field of view angle
    else if (ch == '-' && ch>1)
       fov--;

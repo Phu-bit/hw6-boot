@@ -13,6 +13,8 @@ uniform vec3 uResolution;
 uniform int uTileSize;
 
 varying vec4 vPos;
+varying vec3 vLight;
+varying vec3 vView;
 varying vec3 vNormal;
 
 float perlinColor;
@@ -87,12 +89,14 @@ float ComputeFBM(vec2 v) {
 void main() {
 
   vec4 position = gl_Vertex;
+  vec4 P = gl_ModelViewMatrix * gl_Vertex;
+
   float randomOffset = ComputeFBM(position.xz);
   position.y += randomOffset;
 
   // Calculate the gradient
-  float dx = 0.01; // A small offset for sampling
-  float dy = 0.01;
+  float dx = 0.001; // A small offset for sampling
+  float dy = 0.001;
   float heightRight = ComputeFBM(position.xz + vec2(dx, 0.0));
   float heightUp = ComputeFBM(position.xz + vec2(0.0, dy));
   vec3 gradient = vec3(heightRight - randomOffset, heightUp - randomOffset, dx * dy) * 1.0;
@@ -101,16 +105,17 @@ void main() {
   vec3 up = vec3(0.0, 1.0, 0.0);
   vec3 normal = normalize(cross(up, gradient));
 
+  vLight  = gl_LightSource[0].position.xyz - P.xyz;
+  
   // Transform position
   gl_Position = gl_ModelViewProjectionMatrix * position;
-
   // Pass the normal to the fragment shader if needed
-  vNormal = normal; // Make sure you declare vNormal as a varying
-
+  vNormal = -1.0 * normal; // Make sure you declare vNormal as a varying
   // vPos = position;
   vPos = vec4(randomOffset);
-
   // Use color unchanged
   gl_FrontColor = gl_Color;
+
+  vView  = -P.xyz;
 
 }
