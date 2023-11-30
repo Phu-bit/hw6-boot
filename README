@@ -1,10 +1,49 @@
-ex13: Lighting
+Final
 
-Willem A. (Vlakkies) Schreuder
+Phu Le
 CSCI4229/5229 Fall 2023
+/******************************/
+What I've accomplished:
+/******************************/
+- I've created a tessalated plane with adjustable resolution.
+The tessalated plane then has it's vertices transformed with fractional brownian motion which 
+involves summing multiple 'octaves' of noise at different frequencies and amplitudes through the vertex shader.
+Because I'm manipulating the vertices of this plane through the vertex shader, 
 
+-I'm also calculating it's normals through the GPU, in the fragment shader, 
+using the cross product of the partial derivative of the model's world position. 
 
-Demonstrates basic lighting using a cube, sphere and icosahedron.
+-I've also implemented the ImGui library for a user interface, in which there are sliders for camera fov,
+and various parameters for controling the perlin noise generated terrain.
+/******************************/
+What still needs to be done:
+/******************************/
+
+- I still need to somehow figure out the instancing of grass/flowers/trees into the scene. What I want to do is use the 
+data from the perlin noise generated in the vertex shader to spawn in those objects on top of the terrain using display lists.
+My idea is to render the noise as a texture somehow, and then use values from that texture to spawn objects, i.e grass gross at this elavation,
+flowers at this, trees here.
+
+- Texture the terrain, based on height.
+
+- figure out of chunking is possible, to create a whole walkable map, although I'm generating the noise from the vertex shader
+so I don't know if that is going to mess with the plans. 
+
+- Just make it look nicer.
+
+/******************************/
+What went wrong:
+/******************************/
+
+- fiddled and worked myself into circles for the past few weeks, investing time in directions that led me right back to the beginning,
+such as wasting time building an opengl 3 engine just go to back to 2, spending time building a project in visual studio just go to back to vsCode,
+starting an engine in webgl just to go back to the original, etc.
+
+- Unable to get cellular automata to work the way I wanted; I wanted generate a random grid of noise, have cellular automata rules sort
+the noise into 'blobs' or little islands, layer several images of those CA blobs on top of each other to create 'spawn grids' for different obj
+to be spawned like grass, trees, etc. and also pass that final layered texture into a shader in order to change the height of the terrain.
+It was too complicated, and I should've pivoted sooner, but I was stubborn and wasted a lot of time to progress too slowly. 
+
 
 
 Key bindings

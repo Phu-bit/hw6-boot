@@ -107,7 +107,7 @@ void display()
    Print("Exponentiation=%.1f Height=%.1f Octaves=%d", uExponentiation, uHeight, uOctaves);
    glWindowPos2i(5,65);
 
-   Print("Press 'o' to change models");
+   Print("Press '<' and '>' to change light angle");
 
    // imGui
    ImGui_ImplOpenGL2_NewFrame();

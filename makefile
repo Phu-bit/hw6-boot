@@ -1,5 +1,5 @@
 # Example 13
-EXE=hw6
+EXE=final
 
 # Main target
 all: $(EXE)
@@ -26,7 +26,7 @@ CLEAN=rm -f $(EXE) *.o *.a
 endif
 
 # Dependencies
-hw6.o: hw6.cpp CSCIx229.h imgui.h Globals.h
+final.o: final.cpp CSCIx229.h imgui.h Globals.h
 fatal.o: fatal.c CSCIx229.h
 errcheck.o: errcheck.c CSCIx229.h
 print.o: print.c CSCIx229.h
@@ -75,7 +75,7 @@ CSCIx229.a:fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o axesHe
 	g++ -c $(CXXFLG) $<
 
 #  Link
-hw6:hw6.o Globals.o ImGuiHelper.o CSCIx229.a  imgui.a
+final:final.o Globals.o ImGuiHelper.o CSCIx229.a  imgui.a
 	g++ $(CFLG) -o $@ $^ $(LIBS)
 
 #  Clean
