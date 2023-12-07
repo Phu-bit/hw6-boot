@@ -44,7 +44,7 @@ colors.o: colors.c CSCIx229.h
 calculateNormalVector.o: calculateNormalVector.c CSCIx229.h
 toriGate.o: toriGate.c CSCIx229.h
 shaderCompile.o: shaderCompile.c CSCIx229.h
-tessellatedPlane.o: tessellatedPlane.c CSCIx229.h
+tessellatedPlane.o: tessellatedPlane.c CSCIx229.h Globals.h
 init.o: init.c CSCIx229.h
 Globals.o: Globals.cpp Globals.h
 ImGuiHelper.o: ImGuiHelper.cpp ImGuiHelper.h imgui.h Globals.h

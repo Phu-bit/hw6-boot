@@ -2,7 +2,7 @@
 
  /**
  * Tessalated Plane
- * Function to draw a tessellated plane of size 256x256
+ * Function to draw a tessellated plane of size gridSizeWidthxgridSizeWidth
  * planesize X, planesize Z, gridsize W, gridsize L
  */
 void drawTessellatedPlane(int planeSizeX, int planeSizeZ, int gridSizeWidth, int gridSizeLength)
@@ -33,4 +33,46 @@ void drawTessellatedPlane(int planeSizeX, int planeSizeZ, int gridSizeWidth, int
         }
     }
     glEnd();
+}
+
+void drawGrid(int planeSize, int gridSizeWidth, int gridSizeLength)
+{
+    int id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, 0.0f, 0.0f); // No offset for the first plane
+
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth, gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, planeSize, 0.0f);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, -planeSize, 0.0f);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, planeSize, -planeSize);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, 0.0f, -planeSize);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, 0.0f, planeSize);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, planeSize, planeSize);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, -planeSize, planeSize);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+    id = glGetUniformLocation(shader,"uOffset");
+    glUniform2f(id, -planeSize, -planeSize);
+    drawTessellatedPlane(planeSize, planeSize,gridSizeWidth,gridSizeLength);
+
+
 }

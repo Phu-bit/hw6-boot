@@ -9,25 +9,19 @@ uniform float uExponentiation;
 uniform float uHeight;
 uniform int uOctaves;
 uniform vec3 uResolution;
+uniform vec2 uOffset; 
 
 uniform int uTileSize;
 
 varying vec4 vPos;
 varying vec3 vLightDir;
-varying vec3 vView;
-varying vec3 vNormal;
 varying vec3 vModelPos;
+varying vec3 vView;
+
 
 float perlinColor;
 
 //All Noise functions from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
-
-float random (vec2 st) {
-    return fract(sin(dot(st.xy,
-                         vec2(12.9898,78.233)))*
-        43758.5453123);
-}
-
 
 // Function to interpolate between values with a smooth curve
 float fade(float t) {
@@ -87,39 +81,39 @@ float ComputeFBM(vec2 v) {
 
 void main() {
 
+  // get position
   vec4 position = gl_Vertex;
-  vec4 P = gl_ModelViewMatrix * gl_Vertex;
+
+  position.xz += uOffset; // Apply the offset
+
+  // Get the position of the vertex in world coordinates
+  vec4 P = gl_ModelViewMatrix * position;
+
+  // Get the light vector
   vec4 L = gl_LightSource[0].position ;
 
+  // Calculating the perlin noise
   float randomOffset = ComputeFBM(position.xz);
+
+  // Adding the perlin noise to the y coordinate
   position.y += randomOffset;
 
-  // Calculate the gradient
-  float dx = 0.001; // A small offset for sampling
-  float dy = 0.001;
-  float heightRight = ComputeFBM(position.xz + vec2(dx, 0.0));
-  float heightUp = ComputeFBM(position.xz + vec2(0.0, dy));
-  vec3 gradient = vec3(heightRight - randomOffset, heightUp - randomOffset, dx * dy) * 1.0;
-  
-  // Calculate the normal
-  vec3 up = vec3(0.0, 1.0, 0.0);
-
-  vec3 normal = normalize(cross(up, gradient));
-
+  // Calculate the light direction
   vLightDir  = L.xyz - P.xyz;
   
   // Transform position
   gl_Position = gl_ModelViewProjectionMatrix * position;
 
-  // Pass the normal to the fragment shader if needed
-  vNormal = normal; // Make sure you declare vNormal as a varying
-  
   // vPos = position;
   vPos = vec4(randomOffset);
+  
   // Use color unchanged
   gl_FrontColor = gl_Color;
 
-  vView  = -P.xyz;
+  // Pass the model position to the fragment shader
   vModelPos = P.xyz;
+
+  // Pass the view vector to the fragment shader
+  vView = normalize(-P.xyz);
 
 }

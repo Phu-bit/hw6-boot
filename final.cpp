@@ -84,8 +84,9 @@ void display()
       id = glGetUniformLocation(shader,"uTime");
       glUniform1f(id,t);
 
-      drawTessellatedPlane(planeSize, planeSize,256,256);
+      drawGrid(planeSize,300,300);
       
+
       glUseProgram(0);
 
    }
@@ -116,6 +117,9 @@ void display()
    ImGuiIO& io = ImGui::GetIO();
 
    RenderImGuiGeneralControls();
+   ImGui::Text(" average fps %.3f ms/f (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+   ImGui::End();
 
    ImGui::Render();
    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
@@ -245,8 +249,6 @@ void reshape(int width,int height)
 /*
  *  Start up GLUT and tell it what to do
  */
-#include "CSCIx229.h"
-
 int main(int argc, char* argv[]) {
    glutInit(&argc, argv);
 

@@ -47,9 +47,7 @@ void RenderImGuiGeneralControls() {
     ImGui::SliderFloat("Height", &uHeight, 1.0f, 10.0f);
     ImGui::SliderInt("Octaves", &uOctaves, 1, 10);
     ImGui::SliderInt("Tile Size", &uTileSize, 1, 10);
-    ImGui::SliderInt("Plane Size", &planeSize, 1, 20);
+    ImGui::SliderInt("Plane Size", &planeSize, 1, 200);
 
-    // End the ImGui frame
-    ImGui::End();
 }
 

@@ -98,6 +98,7 @@ void PrintProgramLog(int obj);
 int CreateShader(GLenum type,char* file);
 int CreateShaderProg(char* VertFile,char* FragFile);
 void drawTessellatedPlane(int planeSizeX, int planeSizeZ, int gridSizeWidth, int gridSizeLength);
+void drawGrid(int planeSize, int gridSizeWidth, int gridSizeLength);
 
 // Init
 typedef void (*DisplayFunc)(void);
